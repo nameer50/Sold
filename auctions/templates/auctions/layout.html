@@ -4,7 +4,11 @@
 <html lang="en">
     <head>
         <title>{% block title %}Auctions{% endblock %}</title>
+<<<<<<< HEAD
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+=======
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+>>>>>>> b6775d96e03aefe96f4ee210ea38eb5035e1343c
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
@@ -20,6 +24,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
             </li>
+<<<<<<< HEAD
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'categories' %}">Categories</a>
             </li>
@@ -31,6 +36,8 @@
             </li>
             
             
+=======
+>>>>>>> b6775d96e03aefe96f4ee210ea38eb5035e1343c
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
