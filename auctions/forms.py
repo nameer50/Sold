@@ -1,7 +1,7 @@
-from django import forms
+from .models import Auction
+from django.forms import ModelForm
 
-class New_listing_form(forms.Form):
-    title = forms.CharField(label="Title", max_length=100)
-    discription = forms.CharField(label="Discription", max_length=500)
-    cost = forms.DecimalField(label="Starting bid", decimal_places=2, max_digits=19, min_value=1)
-    img = forms.ImageField(required=False)
+class New_listing_form(ModelForm):
+    class Meta:
+        model = Auction
+        fields = ['title', 'discription', 'img', 'price']

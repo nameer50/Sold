@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import New_listing_form
 from .models import User,Auction
+import os
 
 
 def index(request):
@@ -78,7 +79,17 @@ def new_listing(request):
     if request.method == "POST":
         form = New_listing_form(request.POST)
         if form.is_valid():
+            
+            title = form.cleaned_data['title']
+            discription = form.cleaned_data['discription']
+            img = form.cleaned_data['img']
+            price = form.cleaned_data['price']
+           
+            new_instance = Auction.objects.create(title=title,discription=discription,img="",price=price)
+
             return HttpResponse("success")
+
+        return render(request,"auctions/new_listing.html",{'form':form})
         
 
 
