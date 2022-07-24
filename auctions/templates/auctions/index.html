@@ -2,6 +2,14 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    {% for auction in auctions %}
+    <div class="card" style="width: 18rem;">
+        <img src="{{auction.img.url}}" class="card-img-top" alt="">
+        <div class="card-body">
+          <h5 class="card-title">{{auction.title}}</h5>
+          <p class="card-text">{{auction.discription}}</p>
+          <p class="card-text">{{auction.price}}</p>
+        </div>
+      </div>
+    {% endfor %}
 {% endblock %}

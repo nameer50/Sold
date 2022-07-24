@@ -4,12 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
-from .models import User
+from .forms import New_listing_form
+from .models import User,Auction
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {"auctions":Auction.objects.all()})
 
 
 def login_view(request):
@@ -72,8 +72,19 @@ def categories(request):
 
 
 def new_listing(request):
-    return HttpResponse("new Listing")
+    if request.method == "GET":
+        form = New_listing_form()
+        return render(request, 'auctions/new_listing.html', {'form':form})
+    if request.method == "POST":
+        form = New_listing_form(request.POST)
+        if form.is_valid():
+            return HttpResponse("success")
+        
+
+
 
 @login_required()
 def watchlist(request):
     return HttpResponse("watchlist")
+
+
