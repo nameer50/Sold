@@ -4,7 +4,9 @@
     <h2>Active Listings</h2>
     {% for auction in auctions %}
     <div class="card" style="width: 18rem;">
+        {% if auction.img %}
         <img src="{{auction.img.url}}" class="card-img-top" alt="">
+        {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{auction.title}}</h5>
           <p class="card-text">{{auction.discription}}</p>
