@@ -15,5 +15,8 @@ class Auction(models.Model):
     user_post = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user", default="1")
 
 
-
+class Comment(models.Model):
+    content = models.CharField(max_length=200)
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="commented_on", default="1")
+    user_comment = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_comm", default="1")
 
