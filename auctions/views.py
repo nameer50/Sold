@@ -77,20 +77,20 @@ def new_listing(request):
         form = New_listing_form()
         return render(request, 'auctions/new_listing.html', {'form':form})
     if request.method == "POST":
-        form = New_listing_form(request.POST)
+        form = New_listing_form(request.POST,request.FILES)
         if form.is_valid():
-            
-            title = form.cleaned_data['title']
-            discription = form.cleaned_data['discription']
-            img = form.cleaned_data['img']
-            price = form.cleaned_data['price']
-           
-            new_instance = Auction.objects.create(title=title,discription=discription,img="",price=price)
+            form.save()
 
+           
+            
             return HttpResponse("success")
 
         return render(request,"auctions/new_listing.html",{'form':form})
         
+def listing(request, auction_id):
+    if request.method == "GET":
+        auction = Auction.objects.get(id=auction_id)
+        return render(request, 'auctions/listing.html', {'auction':auction})
 
 
 

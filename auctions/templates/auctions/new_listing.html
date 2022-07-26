@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<form action="/new_listing" method="post" class="form-control">
+<form action="/new_listing" method="post" class="form-control" enctype="multipart/form-data">
     {% csrf_token %}
 {{form.as_p}}
 <input type="submit">

@@ -3,7 +3,7 @@
 {% block body %}
     <h2>Active Listings</h2>
     {% for auction in auctions %}
-    <div class="card" style="width: 18rem;">
+    <a href="{% url 'listing' auction.id %}" class="card" style="width: 18rem;" >
         {% if auction.img %}
         <img src="{{auction.img.url}}" class="card-img-top" alt="">
         {% endif %}
