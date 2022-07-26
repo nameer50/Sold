@@ -16,7 +16,7 @@ class Auction(models.Model):
 
 
 class Comment(models.Model):
-    content = models.CharField(max_length=200)
+    comment = models.TextField(blank=False)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="commented_on", default="1")
     user_comment = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_comm", default="1")
 

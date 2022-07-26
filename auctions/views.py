@@ -4,8 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .forms import New_listing_form
-from .models import User,Auction
+from .forms import New_listing_form, New_Comment_form
+from .models import User,Auction,Comment
 import os
 
 
@@ -79,18 +79,33 @@ def new_listing(request):
     if request.method == "POST":
         form = New_listing_form(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
+            title = form.cleaned_data['title']
+            img = form.cleaned_data['img']
+            discription = form.cleaned_data['discription']
+            price = form.cleaned_data['price']
+            user_post = request.user
+            f = Auction(title=title, img=img, discription=discription, price=price, user_post=user_post)
+            f.save()
 
-           
-            
             return HttpResponse("success")
 
         return render(request,"auctions/new_listing.html",{'form':form})
         
 def listing(request, auction_id):
-    if request.method == "GET":
+    auction = Auction.objects.get(id=auction_id)
+    comment_form = New_Comment_form()
+    comments = Comment.objects.filter(auction=auction)
+    return render(request, 'auctions/listing.html', {'auction':auction, 'comment_form':comment_form, 'comments':comments})
+
+def process_comment(request, auction_id):
+    if request.method == "POST":
         auction = Auction.objects.get(id=auction_id)
-        return render(request, 'auctions/listing.html', {'auction':auction})
+        form = New_Comment_form(request.POST)
+        if form.is_valid():
+            comment = form.cleaned_data["comment"]
+            comment = Comment(comment=comment, user_comment= User.objects.get(pk=request.user.id), auction=auction)
+            comment.save()
+            return HttpResponse("commented")
 
 
 
