@@ -1,3 +1,4 @@
+
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -100,7 +101,15 @@ def listing(request, auction_id):
     comment_form = New_Comment_form()
     comments = Comment.objects.filter(auction=auction)
     bid_form = New_Bid_form()
-    return render(request, 'auctions/listing.html', {'auction':auction, 'comment_form':comment_form, 'comments':comments, 'bid_form':bid_form})
+    bid = Bid.objects.get(listing=auction)
+    try:
+        on_watchlist = Watchlist.objects.get(user_watchlist=request.user,  auctions=auction)
+    except Watchlist.DoesNotExist:
+        on_watchlist = None
+
+
+    return render(request, 'auctions/listing.html', {'auction':auction, 'comment_form':comment_form,
+     'comments':comments, 'bid_form':bid_form, 'bid':bid, 'on_watchlist':on_watchlist})
 
 def process_comment(request, auction_id):
     if request.method == "POST":
@@ -118,6 +127,14 @@ def add_watchlist(request, auction_id):
         f = Watchlist(user_watchlist=User.objects.get(pk=request.user.id), auctions=auction)
         f.save()
         return HttpResponse("added to watchlist")
+
+def remove_watchlist(request, auction_id):
+    if request.method == "POST":
+        auction = Auction.objects.get(id=auction_id)
+        f = Watchlist.objects.get(user_watchlist=request.user, auctions=auction)
+        f.delete()
+        return HttpResponse("Removed from watchlist")
+
 
 def make_bid(request, auction_id):
     if request.method == "POST":
