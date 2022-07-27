@@ -11,7 +11,7 @@ import os
 
 
 def index(request):
-    return render(request, "auctions/index.html", {"auctions":Auction.objects.all()})
+    return render(request, "auctions/index.html", {"auctions":Bid.objects.all()})
 
 
 def login_view(request):
@@ -164,6 +164,11 @@ def make_bid(request, auction_id):
 def watchlist(request):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
-        return render(request, 'auctions/watchlist.html', {'watchlist': user.user_watch.all()})
+        watchlist = user.user_watch.all()
+        bid = []
+        for listings in watchlist:
+            bid.append(Bid.objects.get(listing=listings.auctions))
+
+        return render(request, 'auctions/watchlist.html', {'watchlist': bid})
 
 

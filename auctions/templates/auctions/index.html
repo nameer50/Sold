@@ -3,14 +3,14 @@
 {% block body %}
     <h2>Active Listings</h2>
     {% for auction in auctions %}
-    <a href="{% url 'listing' auction.id %}" class="card" style="width: 18rem;" >
-        {% if auction.img %}
-        <img src="{{auction.img.url}}" class="card-img-top" alt="">
+    <a href="{% url 'listing' auction.listing.id %}" class="card" style="width: 18rem;" >
+        {% if auction.listing.img %}
+        <img src="{{auction.listing.img.url}}" class="card-img-top" alt="">
         {% endif %}
         <div class="card-body">
-          <h5 class="card-title">{{auction.title}}</h5>
-          <p class="card-text">{{auction.discription}}</p>
-          <p class="card-text">{{auction.bid_listing.Bid}}</p>
+          <h5 class="card-title">{{auction.listing.title}}</h5>
+          <p class="card-text">{{auction.listing.discription}}</p>
+          <p class="card-text">Current bid: {{auction.Bid}}</p>
         </div>
       </div>
     {% endfor %}
