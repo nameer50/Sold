@@ -86,6 +86,8 @@ def new_listing(request):
             user_post = request.user
             f = Auction(title=title, img=img, discription=discription, price=price, user_post=user_post)
             f.save()
+
+            # Creating an initial bid with the price the poster provided. This will be used to evaluate new bids
             b = Bid(Bid=price, user_bid=request.user, listing=f)
             b.save()
 
@@ -122,8 +124,13 @@ def make_bid(request, auction_id):
         auction = Auction.objects.get(id=auction_id)
         form = New_Bid_form(request.POST)
         user = request.user
+
+        # Dont want to allow the poster to bid on their own listing. That is corruption.
         if auction.user_post == request.user:
             return HttpResponse("Cannot bid on your own listing")
+
+        # Here I am checking if the current bid in the database is higher or lower than the provided bid
+        # I am deleting a bid from the database if the provided bid is higher than the one there and storing the new one.    
         if form.is_valid():
             bid = form.cleaned_data["Bid"]
             bids = Bid.objects.get(listing=auction)
