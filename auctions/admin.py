@@ -5,6 +5,10 @@ from .models import Auction, User,Comment, Watchlist,Bid
 class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "username")
 
+class AuctionAdmin(admin.ModelAdmin):
+    list_display = ("id","title", "img", "discription", 'price', 'user_post', 'active')
+    
+
 class CommentAdmin(admin.ModelAdmin):
     list_display = ("id","comment", "auction", "user_comment")
 
@@ -16,7 +20,7 @@ class BidAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Auction)
+admin.site.register(Auction, AuctionAdmin)
 admin.site.register(Watchlist,WatchlistAdmin)
 admin.site.register(Comment,CommentAdmin)
 admin.site.register(Bid, BidAdmin)

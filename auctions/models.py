@@ -14,6 +14,7 @@ class Auction(models.Model):
     discription = models.CharField(max_length=200, null="False")
     price = models.DecimalField(max_digits=19,decimal_places=2, null="False", validators=[MinValueValidator(limit_value=1)])
     user_post = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user", default="1")
+    active = models.BooleanField(default=True)
 
 
 class Comment(models.Model):

@@ -13,9 +13,16 @@
           <p class="card-text">Highest Bid: {{bid.Bid}}</p>
           {% if auction.user_post == request.user %}
           <p class="card-text"><small class="text-muted">Listing posted by you</small></p>
+          {% if auction.active %}
+          <form action="{% url 'close_listing' auction.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Close listing">
+          </form>
+          {% endif %}
           {% else %}
           <p class="card-text"><small class="text-muted">Posted by: {{auction.user_post}}</small></p>
           {% endif %}
+          
           {% if on_watchlist %}
           <div>
             <form action="{% url 'removeWatchlist' auction.id %}" method="post">
@@ -23,7 +30,7 @@
               <input type="submit" value="Remove from watchlist">
             </form>
           </div>
-          {% else %}
+          {% elif not on_watchlist and auction.active %}
           <div>
             <form action="{% url 'add_watchlist' auction.id %}" method="post">
               {% csrf_token %}
@@ -31,6 +38,7 @@
             </form>
           </div>
           {% endif %}
+          {% if auction.active %}
           <div>
             <form action="{% url 'make_bid' auction.id %}" method="post">
               {% csrf_token %}
@@ -38,6 +46,7 @@
               <input type="submit" value="Make bid">
             </form>
           </div>
+          {% endif %}
           <div class="card">
             <div class="card-header">
               Comments
@@ -55,6 +64,7 @@
       </div>
     </div>
   </div>
+  {% if auction.active %}
   <div>
     <form action="{% url 'process_comment' auction.id %}" method="post">
       {% csrf_token %}
@@ -62,5 +72,6 @@
       <input type="submit">
     </form>
   </div>
+  {% endif %}
 
 {% endblock %}

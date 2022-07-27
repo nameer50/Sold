@@ -160,6 +160,13 @@ def make_bid(request, auction_id):
                 b.save()
                 return HttpResponse("Bid made")
 
+def close_listing(request, auction_id):
+    if request.method == "POST":
+        auction = Auction.objects.get(pk=auction_id)
+        auction.active = False
+        auction.save()
+        return HttpResponse("listing is closed")
+
 @login_required()
 def watchlist(request):
     if request.method == "GET":
