@@ -15,6 +15,19 @@
           {% else %}
           <p class="card-text"><small class="text-muted">Posted by: {{auction.user_post}}</small></p>
           {% endif %}
+          <div>
+            <form action="{% url 'add_watchlist' auction.id %}" method="post">
+              {% csrf_token %}
+              <input type="submit" value="Add item to watchlist">
+            </form>
+          </div>
+          <div>
+            <form action="{% url 'make_bid' auction.id %}" method="post">
+              {% csrf_token %}
+              {{bid_form}}
+              <input type="submit" value="Make bid">
+            </form>
+          </div>
           <div class="card">
             <div class="card-header">
               Comments

@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% for listing in watchlist %}
+<a href="{% url 'listing' listing.auctions.id %}" class="card mb-3" style="max-width: 100%; height: fit-content;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{{listing.auctions.img.url}}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{listing.auctions.title}}</h5>
+          <p class="card-text">{{listing.auctions.discription}}</p>
+        </div>
+        </div>
+        </div>
+        </a>
+    {% endfor %}
+{% endblock %}

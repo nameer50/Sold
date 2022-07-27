@@ -4,8 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .forms import New_listing_form, New_Comment_form
-from .models import User,Auction,Comment
+from .forms import New_listing_form, New_Comment_form, New_Bid_form
+from .models import Bid, User,Auction,Comment, Watchlist
 import os
 
 
@@ -86,6 +86,8 @@ def new_listing(request):
             user_post = request.user
             f = Auction(title=title, img=img, discription=discription, price=price, user_post=user_post)
             f.save()
+            b = Bid(Bid=price, user_bid=request.user, listing=f)
+            b.save()
 
             return HttpResponse("success")
 
@@ -95,7 +97,8 @@ def listing(request, auction_id):
     auction = Auction.objects.get(id=auction_id)
     comment_form = New_Comment_form()
     comments = Comment.objects.filter(auction=auction)
-    return render(request, 'auctions/listing.html', {'auction':auction, 'comment_form':comment_form, 'comments':comments})
+    bid_form = New_Bid_form()
+    return render(request, 'auctions/listing.html', {'auction':auction, 'comment_form':comment_form, 'comments':comments, 'bid_form':bid_form})
 
 def process_comment(request, auction_id):
     if request.method == "POST":
@@ -107,10 +110,36 @@ def process_comment(request, auction_id):
             comment.save()
             return HttpResponse("commented")
 
+def add_watchlist(request, auction_id):
+    if request.method == "POST":
+        auction = Auction.objects.get(id=auction_id)
+        f = Watchlist(user_watchlist=User.objects.get(pk=request.user.id), auctions=auction)
+        f.save()
+        return HttpResponse("added to watchlist")
 
+def make_bid(request, auction_id):
+    if request.method == "POST":
+        auction = Auction.objects.get(id=auction_id)
+        form = New_Bid_form(request.POST)
+        user = request.user
+        if auction.user_post == request.user:
+            return HttpResponse("Cannot bid on your own listing")
+        if form.is_valid():
+            bid = form.cleaned_data["Bid"]
+            bids = Bid.objects.get(listing=auction)
+            highest_bid = bids.Bid
+            if bid <= highest_bid:
+                return HttpResponse("Bid must be higher than the current highest bid")
+            else:
+                bids.delete()
+                b = Bid(Bid=bid, user_bid=user, listing=auction)
+                b.save()
+                return HttpResponse("Bid made")
 
 @login_required()
 def watchlist(request):
-    return HttpResponse("watchlist")
+    if request.method == "GET":
+        user = User.objects.get(pk=request.user.id)
+        return render(request, 'auctions/watchlist.html', {'watchlist': user.user_watch.all()})
 
 
