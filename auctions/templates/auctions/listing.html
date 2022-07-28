@@ -22,7 +22,6 @@
           {% else %}
           <p class="card-text"><small class="text-muted">Posted by: {{auction.user_post}}</small></p>
           {% endif %}
-          
           {% if on_watchlist %}
           <div>
             <form action="{% url 'removeWatchlist' auction.id %}" method="post">

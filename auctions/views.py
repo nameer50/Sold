@@ -1,4 +1,5 @@
 
+from unicodedata import category
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -84,8 +85,9 @@ def new_listing(request):
             img = form.cleaned_data['img']
             discription = form.cleaned_data['discription']
             price = form.cleaned_data['price']
+            category = form.cleaned_data['category']
             user_post = request.user
-            f = Auction(title=title, img=img, discription=discription, price=price, user_post=user_post)
+            f = Auction(title=title, img=img, discription=discription, price=price, user_post=user_post, category=category)
             f.save()
 
             # Creating an initial bid with the price the poster provided. This will be used to evaluate new bids

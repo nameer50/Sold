@@ -6,7 +6,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "username")
 
 class AuctionAdmin(admin.ModelAdmin):
-    list_display = ("id","title", "img", "discription", 'price', 'user_post', 'active')
+    list_display = ("id","title", "img", "discription", 'price', 'user_post', 'active', 'category')
     
 
 class CommentAdmin(admin.ModelAdmin):

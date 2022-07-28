@@ -1,4 +1,5 @@
 from email.policy import default
+from unicodedata import category
 from xml.parsers.expat import model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -9,12 +10,15 @@ class User(AbstractUser):
 
 
 class Auction(models.Model):
+    Categories = (('Toys', 'Toys'), ('Home', 'Home'))
     title = models.CharField(max_length=64)
     img = models.ImageField(upload_to='uploads/', default="uploads/No_image_available.svg.png")
     discription = models.CharField(max_length=200, null="False")
     price = models.DecimalField(max_digits=19,decimal_places=2, null="False", validators=[MinValueValidator(limit_value=1)])
     user_post = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user", default="1")
+    category = models.CharField(max_length=20, blank=True, null=True, choices=Categories)
     active = models.BooleanField(default=True)
+
 
 
 class Comment(models.Model):
