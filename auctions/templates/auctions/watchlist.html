@@ -2,7 +2,7 @@
 
 {% block body %}
 {% for listings in watchlist %}
-<a href="{% url 'listing' listings.listing.id %}" class="card mb-3" style="max-width: 100%; height: fit-content;">
+<a href="{% url 'listing' listings.listing.id %}" class="card mb-3" style="max-width: 60%; height: fit-content;">
     <div class="row g-0">
       <div class="col-md-4">
         <img src="{{listings.listing.img.url}}" class="img-fluid rounded-start" alt="...">

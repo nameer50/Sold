@@ -1,4 +1,4 @@
-from email.policy import default
+from operator import itemgetter
 from unicodedata import category
 from xml.parsers.expat import model
 from django.contrib.auth.models import AbstractUser
@@ -10,7 +10,8 @@ class User(AbstractUser):
 
 
 class Auction(models.Model):
-    Categories = (('Toys', 'Toys'), ('Home', 'Home'))
+    Categories = [('Toys', 'Toys'), ('Home', 'Home'), ('Fashion','Fashion'), ('Electronics', 'Electronics'), ('Automotive', 'Automotive'), ('Other','Other')]
+    Categories.sort(key=itemgetter(1))
     title = models.CharField(max_length=64)
     img = models.ImageField(upload_to='uploads/', default="uploads/No_image_available.svg.png")
     discription = models.CharField(max_length=200, null="False")

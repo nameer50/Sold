@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="card mb-3" style="max-width: 100%; height: fit-content;">
+<div class="card mb-3" style="max-width: 90%; height: fit-content;">
     <div class="row g-0">
       <div class="col-md-4">
         <img src="{{auction.img.url}}" class="img-fluid rounded-start" alt="...">
@@ -10,11 +10,12 @@
         <div class="card-body">
           <h5 class="card-title">{{auction.title}}</h5>
           <p class="card-text">{{auction.discription}}</p>
-          <p class="card-text">Highest Bid: {{bid.Bid}}</p>
+          <p class="card-text" style="font-weight:bold">Highest Bid: ${{bid.Bid}}</p>
+          <p class="card-text"><small class="text-muted">Category: {{auction.category}}</small></p>
           {% if auction.user_post == request.user %}
           <p class="card-text"><small class="text-muted">Listing posted by you</small></p>
           {% if auction.active %}
-          <form action="{% url 'close_listing' auction.id %}" method="post">
+          <form action="{% url 'close_listing' auction.id %}" method="post" style="margin-top:20px;">
             {% csrf_token %}
             <input type="submit" value="Close listing">
           </form>
@@ -24,14 +25,14 @@
           {% endif %}
           {% if on_watchlist %}
           <div>
-            <form action="{% url 'removeWatchlist' auction.id %}" method="post">
+            <form action="{% url 'removeWatchlist' auction.id %}" method="post" style="margin-top:20px;">
               {% csrf_token %}
               <input type="submit" value="Remove from watchlist">
             </form>
           </div>
           {% elif not on_watchlist and auction.active %}
           <div>
-            <form action="{% url 'add_watchlist' auction.id %}" method="post">
+            <form action="{% url 'add_watchlist' auction.id %}" method="post" style="margin-top:20px;">
               {% csrf_token %}
               <input type="submit" value="Add item to watchlist">
             </form>
@@ -39,7 +40,7 @@
           {% endif %}
           {% if auction.active %}
           <div>
-            <form action="{% url 'make_bid' auction.id %}" method="post">
+            <form action="{% url 'make_bid' auction.id %}" method="post" style="margin-top:20px;">
               {% csrf_token %}
               {{bid_form}}
               <input type="submit" value="Make bid">
@@ -52,7 +53,7 @@
           {% if not auction.active and request.user == bid.user_bid %}
           <p class="card-text">You have won this acution!</p>
           {% endif %}
-          <div class="card">
+          <div class="card" style="margin-top:30px">
             <div class="card-header">
               Comments
             </div>

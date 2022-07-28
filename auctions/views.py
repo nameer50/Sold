@@ -1,5 +1,4 @@
 
-from unicodedata import category
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -12,6 +11,8 @@ import os
 
 
 def index(request):
+    CATEGORIES = Auction.Categories
+    CATEGORIES = [x[0] for x in CATEGORIES]
     return render(request, "auctions/index.html", {"auctions":Bid.objects.all()})
 
 
@@ -66,8 +67,16 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-def categories(request):
-    return HttpResponse("categories")
+
+def categories(request, category):
+    if request.method == "GET":
+        listings = Auction.objects.filter(category=category)
+        auctions = []
+        for listing in listings:
+            auctions.append(Bid.objects.get(listing=listing))
+
+        return render(request, 'auctions/categories.html', {'listings': auctions})
+
 
 
 
@@ -86,6 +95,8 @@ def new_listing(request):
             discription = form.cleaned_data['discription']
             price = form.cleaned_data['price']
             category = form.cleaned_data['category']
+            if category is None:
+                category="Other"
             user_post = request.user
             f = Auction(title=title, img=img, discription=discription, price=price, user_post=user_post, category=category)
             f.save()
