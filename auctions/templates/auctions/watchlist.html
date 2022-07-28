@@ -18,7 +18,7 @@
           {% if not listings.listing.active %}
           <p class="card-text"><small class="text-muted">This listing is closed</small></p>
           {% endif %}
-          {% if request.user == listings.user_bid and not listings.listing.active %}
+          {% if request.user == listings.user_bid and not listings.listing.active and not request.user == listings.listing.user_post %}
           <p class="card-text"><small class="text-muted">You have won this auction!</small></p>
           {% elif request.user == listings.user_bid and not request.user == listings.listing.user_post %}
           <p class="card-text"><small class="text-muted">You are winning the bidding war!</small></p>

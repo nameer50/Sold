@@ -2,6 +2,8 @@
 
 {% block body %}
 {% for listing in listings %}
+
+{% if listing.listing.active %}
 <a href="{% url 'listing' listing.listing.id %}" class="card mb-3" style="max-width: 60%; height: fit-content;">
     <div class="row g-0">
       <div class="col-md-4">
@@ -12,11 +14,10 @@
           <h5 class="card-title">{{listing.listing.title}}</h5>
           <p class="card-text">{{listing.listing.discription}}</p>
           <p class="card-text">Highest bid: {{listing.Bid}}</p>
-          
         </div>
         </div>
         </div>
         </a>
+{% endif %}
 {% endfor %}
-
 {% endblock %}
