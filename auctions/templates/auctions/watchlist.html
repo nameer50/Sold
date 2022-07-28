@@ -12,8 +12,14 @@
           <h5 class="card-title">{{listings.listing.title}}</h5>
           <p class="card-text">{{listings.listing.discription}}</p>
           <p class="card-text">Current bid: {{listings.Bid}}</p>
-          {% if request.user == listings.user_bid %}
+          {% if request.user == listings.listing.user_post %}
+          <p class="card-text"><small class="text-muted">You have posted this listing</small></p>
+          {% elif request.user == listings.user_bid and not listings.listing.active %}
+          <p class="card-text"><small class="text-muted">You have won this auction!</small></p>
+          {% elif request.user == listings.user_bid %}
           <p class="card-text"><small class="text-muted">You are winning the bidding war!</small></p>
+          {% elif not listings.listing.active %}
+          <p class="card-text"><small class="text-muted">This listing has closed. You have lost</small></p>
           {% endif %}
 
         </div>

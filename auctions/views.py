@@ -91,7 +91,8 @@ def new_listing(request):
             # Creating an initial bid with the price the poster provided. This will be used to evaluate new bids
             b = Bid(Bid=price, user_bid=request.user, listing=f)
             b.save()
-
+            w = Watchlist(user_watchlist=request.user, auctions=f)
+            w.save()
             return HttpResponse("success")
 
         return render(request,"auctions/new_listing.html",{'form':form})
@@ -158,6 +159,14 @@ def make_bid(request, auction_id):
                 bids.delete()
                 b = Bid(Bid=bid, user_bid=user, listing=auction)
                 b.save()
+                try:
+                    exists = Watchlist.objects.get(user_watchlist=request.user,auctions=auction)
+                except Watchlist.DoesNotExist:
+                    exists = None
+                if exists is None:
+                    f = Watchlist(user_watchlist=request.user, auctions=auction)
+                    f.save()
+
                 return HttpResponse("Bid made")
 
 def close_listing(request, auction_id):
