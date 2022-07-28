@@ -47,6 +47,12 @@
             </form>
           </div>
           {% endif %}
+          {% if not auction.active %}
+          <p class="card-text">This auction is closed</p>
+          {% endif %}
+          {% if not auction.active and request.user == bid.user_bid %}
+          <p class="card-text">You have won this acution!</p>
+          {% endif %}
           <div class="card">
             <div class="card-header">
               Comments
