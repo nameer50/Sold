@@ -83,7 +83,7 @@ def categories(request, category):
 
 
 
-
+@login_required(login_url="login")
 def new_listing(request):
     if request.method == "GET":
         form = New_listing_form()
@@ -120,13 +120,14 @@ def listing(request, auction_id):
     bid = Bid.objects.get(listing=auction)
     try:
         on_watchlist = Watchlist.objects.get(user_watchlist=request.user,  auctions=auction)
-    except Watchlist.DoesNotExist:
+    except (Watchlist.DoesNotExist, TypeError):
         on_watchlist = None
 
 
     return render(request, 'auctions/listing.html', {'auction':auction, 'comment_form':comment_form,
      'comments':comments, 'bid_form':bid_form, 'bid':bid, 'on_watchlist':on_watchlist})
 
+@login_required(login_url="login")
 def process_comment(request, auction_id):
     if request.method == "POST":
         auction = Auction.objects.get(id=auction_id)
@@ -138,6 +139,7 @@ def process_comment(request, auction_id):
             messages.success(request, "Commented!")
             return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
+@login_required(login_url="login")
 def add_watchlist(request, auction_id):
     if request.method == "POST":
         auction = Auction.objects.get(id=auction_id)
@@ -146,6 +148,7 @@ def add_watchlist(request, auction_id):
         messages.success(request, "Added to watchlist!")
         return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
+@login_required(login_url="login")
 def remove_watchlist(request, auction_id):
     if request.method == "POST":
         auction = Auction.objects.get(id=auction_id)
@@ -154,6 +157,7 @@ def remove_watchlist(request, auction_id):
         messages.success(request, "Removed from watchlist!")
         return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
+@login_required(login_url="login")
 def make_bid(request, auction_id):
     if request.method == "POST":
         auction = Auction.objects.get(id=auction_id)
@@ -197,7 +201,7 @@ def close_listing(request, auction_id):
         messages.success(request, "Listing is closed")
         return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
-@login_required()
+@login_required(login_url="login")
 def watchlist(request):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
