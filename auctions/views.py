@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import New_listing_form, New_Comment_form, New_Bid_form
 from .models import Bid, User,Auction,Comment, Watchlist
 import os
@@ -106,7 +107,8 @@ def new_listing(request):
             b.save()
             w = Watchlist(user_watchlist=request.user, auctions=f)
             w.save()
-            return HttpResponse("success")
+            messages.success(request, "Listing created successfully!")
+            return HttpResponseRedirect(reverse("listing", args=(f.id,)))
 
         return render(request,"auctions/new_listing.html",{'form':form})
         
@@ -133,22 +135,24 @@ def process_comment(request, auction_id):
             comment = form.cleaned_data["comment"]
             comment = Comment(comment=comment, user_comment= User.objects.get(pk=request.user.id), auction=auction)
             comment.save()
-            return HttpResponse("commented")
+            messages.success(request, "Commented!")
+            return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
 def add_watchlist(request, auction_id):
     if request.method == "POST":
         auction = Auction.objects.get(id=auction_id)
         f = Watchlist(user_watchlist=User.objects.get(pk=request.user.id), auctions=auction)
         f.save()
-        return HttpResponse("added to watchlist")
+        messages.success(request, "Added to watchlist!")
+        return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
 def remove_watchlist(request, auction_id):
     if request.method == "POST":
         auction = Auction.objects.get(id=auction_id)
         f = Watchlist.objects.get(user_watchlist=request.user, auctions=auction)
         f.delete()
-        return HttpResponse("Removed from watchlist")
-
+        messages.success(request, "Removed from watchlist!")
+        return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
 def make_bid(request, auction_id):
     if request.method == "POST":
@@ -167,7 +171,8 @@ def make_bid(request, auction_id):
             bids = Bid.objects.get(listing=auction)
             highest_bid = bids.Bid
             if bid <= highest_bid:
-                return HttpResponse("Bid must be higher than the current highest bid")
+                messages.error(request, "Bid must be higher than the current highest bid")
+                return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
             else:
                 bids.delete()
                 b = Bid(Bid=bid, user_bid=user, listing=auction)
@@ -179,15 +184,18 @@ def make_bid(request, auction_id):
                 if exists is None:
                     f = Watchlist(user_watchlist=request.user, auctions=auction)
                     f.save()
+                    
 
-                return HttpResponse("Bid made")
+                messages.success(request, "Bid made")
+                return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
 def close_listing(request, auction_id):
     if request.method == "POST":
         auction = Auction.objects.get(pk=auction_id)
         auction.active = False
         auction.save()
-        return HttpResponse("listing is closed")
+        messages.success(request, "Listing is closed")
+        return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
 @login_required()
 def watchlist(request):

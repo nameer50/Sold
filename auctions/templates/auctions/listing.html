@@ -1,6 +1,11 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+{% if messages %}
+{% for message in messages %}
+{{message}}
+{% endfor %}
+{% endif %}
 <div class="card mb-3" style="max-width: 90%; height: fit-content;">
     <div class="row g-0">
       <div class="col-md-4">
@@ -38,7 +43,7 @@
             </form>
           </div>
           {% endif %}
-          {% if auction.active %}
+          {% if auction.active and not request.user == auction.user_post %}
           <div>
             <form action="{% url 'make_bid' auction.id %}" method="post" style="margin-top:20px;">
               {% csrf_token %}
