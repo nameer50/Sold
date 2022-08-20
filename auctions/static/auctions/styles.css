@@ -2,3 +2,15 @@ body {
     padding: 10px;
 }
 
+#id_comment{
+    width: 500px;
+    height: 50px;
+
+}
+
+#comment-form{
+    display: flex;
+    height: 70px;
+    align-items: center;
+    column-gap: 10px;
+}

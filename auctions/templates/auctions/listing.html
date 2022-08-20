@@ -80,11 +80,11 @@
     </div>
   </div>
   {% if auction.active %}
-  <div>
-    <form action="{% url 'process_comment' auction.id %}" method="post">
+  <div id="comment_div">
+    <form action="{% url 'process_comment' auction.id %}" method="post" id="comment-form">
       {% csrf_token %}
       {{comment_form}}
-      <input type="submit">
+      <input type="submit" value="Share">
     </form>
   </div>
   {% endif %}
