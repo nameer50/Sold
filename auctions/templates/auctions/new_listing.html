@@ -4,6 +4,6 @@
 <form action="/new_listing" method="post" class="form-control" enctype="multipart/form-data">
     {% csrf_token %}
 {{form.as_p}}
-<input type="submit">
+<input type="submit" value="Post Auction">
 </form>
 {% endblock %}

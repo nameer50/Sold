@@ -79,10 +79,6 @@ def categories(request, category):
         return render(request, 'auctions/categories.html', {'listings': auctions})
 
 
-
-
-
-
 @login_required(login_url="login")
 def new_listing(request):
     if request.method == "GET":
@@ -123,7 +119,6 @@ def listing(request, auction_id):
     except (Watchlist.DoesNotExist, TypeError):
         on_watchlist = None
 
-
     return render(request, 'auctions/listing.html', {'auction':auction, 'comment_form':comment_form,
      'comments':comments, 'bid_form':bid_form, 'bid':bid, 'on_watchlist':on_watchlist})
 
@@ -134,9 +129,14 @@ def process_comment(request, auction_id):
         form = New_Comment_form(request.POST)
         if form.is_valid():
             comment = form.cleaned_data["comment"]
-            comment = Comment(comment=comment, user_comment= User.objects.get(pk=request.user.id), auction=auction)
-            comment.save()
-            messages.success(request, "Commented!")
+            if not comment.isspace():
+                comment = Comment(comment=comment, user_comment= User.objects.get(pk=request.user.id), auction=auction)
+                comment.save()
+                messages.success(request, "Commented!")
+                return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
+            else:
+                return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
+        else:
             return HttpResponseRedirect(reverse("listing", args=(auction.id,)))
 
 @login_required(login_url="login")
